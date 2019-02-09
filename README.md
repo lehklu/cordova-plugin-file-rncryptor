@@ -1,8 +1,8 @@
 cordova-plugin-file-rncryptor
 ====
 
-> Cordova File Encryption Plugin for Android and iOS.
-> Using RNCryptor(iOS) and JNCryptor(Android) for interchangeable files
+> Cordova File Encryption Plugin for Android and iOS.<br>
+> Using RNCryptor(iOS) and JNCryptor(Android) for interchangeable files.
 
 > Based on:
 >
