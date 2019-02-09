@@ -1,0 +1,32 @@
+{
+  "name": "cordova-plugin-file-rncryptor",
+  "version": "1.0.0",
+  "description": "Cordova File Encryption Plugin for Android and iOS",
+  "cordova": {
+    "id": "cordova-plugin-file-rncryptor",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lehklu/cordova-plugin-file-rncryptor.git"
+  },
+  "keywords": [
+    "cordova",
+    "file",
+    "rncryptor",
+    "encrypt",
+    "decrypt",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "Werner Lechner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lehklu/cordova-plugin-file-rncryptor/issues"
+  },
+  "homepage": "https://github.com/lehklu/cordova-plugin-file-rncryptor#readme"
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-file-rncryptor" version="1.0.0">
+  <name>FileRNCryptor</name>
+  <description>Cordova File Encryption Plugin for Android and iOS</description>
+  <license>MIT</license>
+  <keywords>cordova,file,rncryptor,encrypt,decrypt</keywords>
+  <repo>https://github.com/lehklu/cordova-plugin-file-rncryptor</repo>
+  <issue>https://github.com/lehklu/cordova-plugin-file-rncryptor/issues</issue>
+  <engines>
+    <engine name="cordova-android" version=">=6.3.0" />
+  </engines>
+  <js-module src="www/FileRNCryptor.js" name="FileRNCryptor" >
+    <merges target="FileRNCryptor"/>
+  </js-module>
+  <!-- android -->
+  <platform name="android">
+    <source-file src="src/android/jncryptor-1.2.0.jar" target-dir="libs"/>
+    <source-file src="src/android/FileRNCryptor.java" target-dir="src/at/lehklu/android"/>
+    <config-file target="res/xml/config.xml" parent="/*" >
+      <feature name="FileRNCryptor">
+        <param name="android-package" value="at.lehklu.android.FileRNCryptor"/>
+        <param name="onload" value="true" />>
+      </feature>
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest">
+      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    </config-file>
+  </platform>
+  <!-- iOS -->
+  <platform name="ios">
+    <config-file parent="/*" target="config.xml">
+      <feature name="FileRNCryptor">
+        <param name="ios-package" value="FileRNCryptor" onload="true" />
+      </feature>
+    </config-file>
+    <framework src="Foundation.framework" />
+    <framework src="Security.framework" />
+    <source-file src="src/ios/FileRNCryptor.m"/>
+    <header-file src="src/ios/FileRNCryptor.h"/>
+    <header-file src="src/ios/RNCryptor/RNCryptor+Private.h" />
+    <header-file src="src/ios/RNCryptor/RNCryptor-Prefix.pch" />
+    <header-file src="src/ios/RNCryptor/RNCryptor.h" />
+    <source-file src="src/ios/RNCryptor/RNCryptor.m" />
+    <header-file src="src/ios/RNCryptor/RNCryptorEngine.h" />
+    <source-file src="src/ios/RNCryptor/RNCryptorEngine.m" />
+    <header-file src="src/ios/RNCryptor/RNDecryptor.h" />
+    <source-file src="src/ios/RNCryptor/RNDecryptor.m" />
+    <header-file src="src/ios/RNCryptor/RNEncryptor.h" />
+    <source-file src="src/ios/RNCryptor/RNEncryptor.m" />
+  </platform>
+</plugin>
