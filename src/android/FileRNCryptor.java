@@ -12,9 +12,10 @@ import org.apache.cordova.CordovaResourceApi;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.ByteBuffer;
 
 /**
  * This class encrypts and decrypts files using the jncryptor lib
@@ -33,7 +34,7 @@ public class FileRNCryptor extends CordovaPlugin {
     	return false;
 
 
-		Path path = Paths.get(args.getString(0));
+		String path = args.getString(0);
     String pass = args.getString(1);
 
     this.cryptOp(path, pass, action, callbackContext);
@@ -41,20 +42,27 @@ public class FileRNCryptor extends CordovaPlugin {
     return true;
   }
 
-  private void cryptOp(Path path, String password, String action, CallbackContext callbackContext) {
-
-		boolean fileWritable=Files.isWritable(path);
-
-  	if(! fileWritable)
-  	{
-  		callbackContext.error("File not writable:"+path.toString());
-  		return;
-  	}
-
+  private void cryptOp(String path, String password, String action, CallbackContext callbackContext) {
 
   	try
   	{
-			byte[] data=Files.readAllBytes(path);
+  		FileInputStream iStream=new FileInputStream(path);
+  		FileChannel iChannel=iStream.getChannel();
+
+  		if(Integer.MAX_VALUE<iChannel.size())
+  		{
+      	LOG.d(TAG, "cryptoOp: file too large");
+      	callbackContext.error("cryptoOp: file too large");
+  			return;
+  			//<--
+  		}
+
+
+  		ByteBuffer buffer=ByteBuffer.allocate((int)iChannel.size());
+  		iChannel.read(buffer);
+			byte[] data=buffer.array();
+			iStream.close();
+
 
 			JNCryptor cryptor = new AES256JNCryptor();
 
@@ -62,9 +70,13 @@ public class FileRNCryptor extends CordovaPlugin {
 				cryptor.encryptData(data, password.toCharArray()):
 				cryptor.decryptData(data, password.toCharArray());
 
-			Files.write(path, cryptData);
 
-			callbackContext.success(path.toString());
+			FileOutputStream oStream=new FileOutputStream(path);
+			FileChannel oChannel=oStream.getChannel();
+			oChannel.write(ByteBuffer.wrap(cryptData));
+			oStream.close();
+
+			callbackContext.success(path);
 
     } catch (IOException e) {
       LOG.d(TAG, "cryptoOp IOException: " + e.getMessage());
