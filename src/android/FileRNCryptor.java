@@ -118,7 +118,7 @@ public class FileRNCryptor extends CordovaPlugin {
 			JNCryptor cryptor = new AES256JNCryptor();
 
 			byte[] cryptData=ENCRYPT_ACTION.equals(action)?
-				cryptor.encryptData(text.toCharArray(), password.toCharArray()):
+				cryptor.encryptData(text.getBytes(StandardCharsets.UTF_8), password.toCharArray()):
 				cryptor.decryptData(Base64.getDecoder().decode(text), password.toCharArray());
 
 			callbackContext.success(ENCRYPT_ACTION.equals(action)?
