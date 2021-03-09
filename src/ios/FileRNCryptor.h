@@ -14,4 +14,7 @@
 - (void)encrypt:(CDVInvokedUrlCommand*)command;
 - (void)decrypt:(CDVInvokedUrlCommand*)command;
 - (NSString*)crypto:(NSString*)action command:(CDVInvokedUrlCommand*)command;
+- (void)encryptText:(CDVInvokedUrlCommand*)command;
+- (void)decryptText:(CDVInvokedUrlCommand*)command;
+- (NSString*)cryptoText:(NSString*)action command:(CDVInvokedUrlCommand*)command;
 @end

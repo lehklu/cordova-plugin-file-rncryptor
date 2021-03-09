@@ -15,7 +15,10 @@ import org.json.JSONException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+
 import java.nio.ByteBuffer;
+import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class encrypts and decrypts files using the jncryptor lib
@@ -26,18 +29,33 @@ public class FileRNCryptor extends CordovaPlugin {
 
   public static final String ENCRYPT_ACTION = "encrypt";
   public static final String DECRYPT_ACTION = "decrypt";
+  public static final String ENCRYPTTEXT_ACTION = "encryptText";
+  public static final String DECRYPTTEXT_ACTION = "decryptText";  
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-		if( ! (action.equals(ENCRYPT_ACTION) || action.equals(DECRYPT_ACTION)))
-    	return false;
+    if(action.equals(ENCRYPT_ACTION) || action.equals(DECRYPT_ACTION))
+    {
+      final String path = args.getString(0);
+      final String pass = args.getString(1);
+  
+      this.cryptOp(path, pass, action, callbackContext);
+    }
+    else if(action.equals(ENCRYPTTEXT_ACTION) || action.equals(DECRYPTTEXT_ACTION))
+    {
+      final String text = args.getString(0);
+      final String pass = args.getString(1);
+  
+      this.cryptOpText(text, pass, action, callbackContext);
+    }
+    else
+    {
 
+      return false;
+      //<--
+    }
 
-		String path = args.getString(0);
-    String pass = args.getString(1);
-
-    this.cryptOp(path, pass, action, callbackContext);
 
     return true;
   }
@@ -92,4 +110,27 @@ public class FileRNCryptor extends CordovaPlugin {
       callbackContext.error(e.getMessage());
 		}
   }
+
+  private void cryptOpText(String text, String password, String action, CallbackContext callbackContext) {
+
+  	try
+  	{
+			JNCryptor cryptor = new AES256JNCryptor();
+
+			byte[] cryptData=ENCRYPT_ACTION.equals(action)?
+				cryptor.encryptData(text.toCharArray(), password.toCharArray()):
+				cryptor.decryptData(Base64.getDecoder().decode(text), password.toCharArray());
+
+			callbackContext.success(ENCRYPT_ACTION.equals(action)?
+        Base64.getEncoder().encodeToString(cryptData):
+        new String(cryptData, StandardCharsets.UTF_8));
+
+    } catch (SecurityException e) {
+      LOG.d(TAG, "cryptoOp SecurityException: " + e.getMessage());
+      callbackContext.error(e.getMessage());
+		} catch (CryptorException e) {
+      LOG.d(TAG, "cryptoOp CryptorException: " + e.getMessage());
+      callbackContext.error(e.getMessage());
+		}
+  }  
 }

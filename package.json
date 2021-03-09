@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-file-rncryptor",
-  "version": "1.0.0",
-  "description": "Cordova File Encryption Plugin for Android and iOS",
+  "version": "1.1.0",
+  "description": "Cordova File/Text Encryption Plugin for Android and iOS",
   "cordova": {
     "id": "cordova-plugin-file-rncryptor",
     "platforms": [

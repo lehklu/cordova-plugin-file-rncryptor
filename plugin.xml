@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-file-rncryptor" version="1.0.0">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-file-rncryptor" version="1.1.0">
   <name>FileRNCryptor</name>
-  <description>Cordova File Encryption Plugin for Android and iOS</description>
+  <description>Cordova File/Text Encryption Plugin for Android and iOS</description>
   <license>MIT</license>
   <keywords>cordova,file,rncryptor,encrypt,decrypt</keywords>
   <repo>https://github.com/lehklu/cordova-plugin-file-rncryptor</repo>
@@ -19,7 +19,7 @@
     <config-file target="res/xml/config.xml" parent="/*" >
       <feature name="FileRNCryptor">
         <param name="android-package" value="at.lehklu.android.FileRNCryptor"/>
-        <param name="onload" value="true" />>
+        <param name="onload" value="true" />
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">

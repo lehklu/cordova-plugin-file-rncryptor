@@ -18,6 +18,14 @@ var FileRNCryptor = {
 
     exec(success, error, PLUGIN_NAME, 'decrypt', [path, password]);
   },
+  encryptText: function (text, password, success, error) {
+
+    exec(success, error, PLUGIN_NAME, 'encryptText', [text, password]);
+  },
+  decryptText: function (text, password, success, error) {
+
+    exec(success, error, PLUGIN_NAME, 'decryptText', [text, password]);
+  },  
 };
 
 module.exports = FileRNCryptor;

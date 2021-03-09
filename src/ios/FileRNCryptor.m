@@ -35,6 +35,30 @@ NSString *const PREFIX_ERROR = @"ERR: ";
 }
 
 /**
+ *  encryptText
+ *
+ *  @param command An array of arguments passed from javascript
+ */
+- (void)encryptText:(CDVInvokedUrlCommand *)command {
+
+  [self.commandDelegate
+  	sendPluginResult:[self cryptoText:@"encryptText" command:command]
+  	callbackId:command.callbackId];
+}
+
+/**
+ *  decryptText
+ *
+ *  @param command An array of arguments passed from javascript
+ */
+- (void)decryptText:(CDVInvokedUrlCommand *)command {
+
+  [self.commandDelegate
+  	sendPluginResult:[self cryptoText:@"decryptText" command:command]
+  	callbackId:command.callbackId];
+}
+
+/**
  *  Encrypts or decrypts file at given URI.
  *
  *
@@ -104,6 +128,75 @@ NSString *const PREFIX_ERROR = @"ERR: ";
 	return [CDVPluginResult
 						resultWithStatus:CDVCommandStatus_OK
 						messageAsString:path];
+}
+
+/**
+ *  Encrypts or decrypts given text.
+ *
+ *
+ *  @param action  Cryptographic operation
+ *  @param command Cordova arguments
+ *
+ *  @return result of operation
+ */
+- (CDVPluginResult*)cryptoText:(NSString *)action command:(CDVInvokedUrlCommand *)command {
+
+  NSData *data = nil;
+  NSString *text = [command.arguments objectAtIndex:0];
+  NSString *password = [command.arguments objectAtIndex:1];
+
+  if(text == nil || [text length] == 0)
+  	return [CDVPluginResult
+  						resultWithStatus:CDVCommandStatus_ERROR
+  						messageAsString:[self _asError: @"Empty argument"]];
+
+
+  NSError *error;
+  NSString *result = nil;
+  if ([action isEqualToString:@"encryptText"])
+  {
+    NSData *textData = [text dataUsingEncoding:NSUTF8StringEncoding];
+
+    data = [RNEncryptor
+    					encryptData:textData
+              withSettings:kRNCryptorAES256Settings
+              password:password
+              error:&error];
+
+    result = [data base64EncodedStringWithOptions:0];
+	}
+	else if ([action isEqualToString:@"decryptText"])
+	{
+    NSData *cryptData = [[NSData alloc] initWithBase64EncodedString:text options:0]; 
+
+    data = [RNDecryptor
+    					decryptData:cryptData
+              withPassword:password
+              error:&error];
+
+    result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	}
+	else
+	{
+		return [CDVPluginResult
+  						resultWithStatus:CDVCommandStatus_ERROR
+  						messageAsString:[self _asError: @"Action not 'encryptText' or 'decryptText'"]];
+	}
+
+
+  if(error != nil)
+  {
+		return [CDVPluginResult
+  						resultWithStatus:CDVCommandStatus_ERROR
+  						messageAsString:[self _asError: [error localizedDescription]]];
+  }
+
+
+
+	[data writeToFile:path atomically:YES];
+	return [CDVPluginResult
+						resultWithStatus:CDVCommandStatus_OK
+						messageAsString:result];
 }
 
 @end
