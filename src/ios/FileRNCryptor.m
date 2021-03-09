@@ -192,8 +192,6 @@ NSString *const PREFIX_ERROR = @"ERR: ";
   }
 
 
-
-	[data writeToFile:path atomically:YES];
 	return [CDVPluginResult
 						resultWithStatus:CDVCommandStatus_OK
 						messageAsString:result];
