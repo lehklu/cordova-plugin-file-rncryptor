@@ -124,7 +124,7 @@ NSString *const PREFIX_ERROR = @"ERR: ";
 
 
 
-	[data writeToFile:path atomically:YES];
+	data writeToFile:path atomically:YES;
 	return [CDVPluginResult
 						resultWithStatus:CDVCommandStatus_OK
 						messageAsString:path];
